@@ -1,0 +1,40 @@
+version: 0.0
+os: linux
+
+files:
+  # (S3 .zip 파일 안) /build/libs/ark-chain-be.jar 파일을
+  # (EC2 서버) /home/ec2-user/app/ 폴더로 복사합니다.
+  - source: /build/libs/ark-chain-be.jar
+    destination: /home/ec2-user/app/
+
+  # (S3 .zip 파일 안) /scripts/ 폴더 전체를
+  # (EC2 서버) /home/ec2-user/scripts/ 폴더로 복사합니다.
+  - source: /scripts/
+    destination: /home/ec2-user/scripts/
+
+# 3. 훅(Hook) 스크립트 설정
+hooks:
+  BeforeInstall:
+    #  앱 디렉터리가 없으면 만들거나, 기존 찌꺼기를 지웁니다.
+    - location: scripts/before_install.sh
+      timeout: 300
+      runas: root # 또는 ec2-user
+
+  ApplicationStart:
+    # 복사된 새 .jar 파일을 실행시킵니다.
+    - location: scripts/application_start.sh
+      timeout: 300
+      runas: ec2-user
+
+  ValidateService:
+    # 앱이 떴는지 헬스 체크.
+    - location: scripts/validate_service.sh
+      timeout: 60
+      runas: ec2-user
+
+  AfterAllowTraffic:
+    # '딸깍'해서 트래픽이 Green으로 넘어온 "직후"에 실행됩니다.
+    # 여기서 'role' 태그를 스왑(swap)합니다.
+    - location: scripts/swap_roles.sh
+      timeout: 180
+      runas: root # (AWS CLI를 써야 하므로 권한 필요)
