@@ -4,12 +4,12 @@ os: linux
 files:
   # (S3 .zip 파일 안) /build/libs/ark-chain-be.jar 파일을
   # (EC2 서버) /home/ec2-user/app/ 폴더로 복사합니다.
-  - source: /build/libs/asg-deploy-test.jar
+  - source: asg-deploy-test.jar
     destination: /home/ec2-user/app/
 
   # (S3 .zip 파일 안) /scripts/ 폴더 전체를
   # (EC2 서버) /home/ec2-user/scripts/ 폴더로 복사합니다.
-  - source: /scripts/
+  - source: scripts/
     destination: /home/ec2-user/scripts/
 
 # 3. 훅(Hook) 스크립트 설정

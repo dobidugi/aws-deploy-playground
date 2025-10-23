@@ -34,6 +34,7 @@ jobs:
       # 5. CodeDeploy용 zip 파일 생성
       - name: Make zip file for CodeDeploy
         run: |
+          chmod +x scripts/*.sh
           mkdir deploy  # zip파일을 담을 임시 폴더
           cp appspec.yml deploy/
           cp build/libs/*.jar deploy/  # 빌드된 jar 파일 경로 확인!

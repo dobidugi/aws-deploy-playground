@@ -3,7 +3,7 @@ echo "Validating service health..."
 
 for i in {1..10}; do
 
-  response=$(curl -s  http://localhost:8080/health)
+  response=$(curl -s  http://localhost:80/health)
 
   # 헬스 체크
   if [[ "$response" == *'"status":"UP"'* ]]; then
